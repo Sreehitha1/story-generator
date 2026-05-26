@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Story Seeds — Life Lessons for Little Minds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+    <style>
+        :root {
+            --cream: #fdf6ec;
+            --warm-brown: #5c3d2e;
+            --amber: #e07b39;
+            --soft-amber: #f4a96a;
+            --golden: #f0c060;
+            --forest: #2d6a4f;
+            --soft-green: #74c69d;
+            --ink: #1a1a2e;
+            --muted: #8a7968;
+            --card-bg: #fffdf8;
+            --shadow: rgba(92, 61, 46, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--cream);
+            min-height: 100vh;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(240,192,96,0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(116,198,157,0.12) 0%, transparent 40%);
+        }
+
+        /* ── Header ── */
+        header {
+            text-align: center;
+            padding: 3rem 1rem 1.5rem;
+            position: relative;
+        }
+
+        .header-icon {
+            font-size: 3.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            color: var(--warm-brown);
+            line-height: 1.1;
+        }
+
+        header h1 em {
+            color: var(--amber);
+            font-style: italic;
+        }
+
+        header p {
+            margin-top: 0.6rem;
+            color: var(--muted);
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        /* ── Main Layout ── */
+        main {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem 4rem;
+        }
+
+        /* ── Card ── */
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 40px var(--shadow);
+            border: 1px solid rgba(224, 123, 57, 0.1);
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--warm-brown);
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ── Form ── */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+        }
+
+        input, select {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            padding: 0.75rem 1rem;
+            border: 2px solid rgba(92, 61, 46, 0.12);
+            border-radius: 12px;
+            background: white;
+            color: var(--ink);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            width: 100%;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--amber);
+            box-shadow: 0 0 0 3px rgba(224, 123, 57, 0.12);
+        }
+
+        /* ── Value Tags ── */
+        .value-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .tag {
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid transparent;
+            background: rgba(224, 123, 57, 0.1);
+            color: var(--amber);
+            transition: all 0.18s;
+        }
+
+        .tag:hover, .tag.active {
+            background: var(--amber);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* ── Generate Button ── */
+        .btn-generate {
+            width: 100%;
+            margin-top: 1.8rem;
+            padding: 1rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--amber), var(--soft-amber));
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 20px rgba(224, 123, 57, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(224, 123, 57, 0.4);
+        }
+
+        .btn-generate:active { transform: translateY(0); }
+
+        .btn-generate:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ── Loading ── */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .loading.visible { display: block; }
+
+        .book-loader {
+            font-size: 3rem;
+            animation: bookFlip 1s ease-in-out infinite alternate;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes bookFlip {
+            from { transform: rotate(-10deg) scale(0.95); }
+            to { transform: rotate(10deg) scale(1.05); }
+        }
+
+        .loading p {
+            color: var(--muted);
+            font-size: 1rem;
+        }
+
+        /* ── Story Output ── */
+        .story-output {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .story-output.visible { display: block; }
+
+        .story-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 12px 48px var(--shadow);
+            animation: slideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .story-header {
+            background: linear-gradient(135deg, var(--warm-brown), #7a4f3a);
+            padding: 2rem 2.5rem;
+            color: white;
+        }
+
+        .story-meta {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            background: rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.9);
+        }
+
+        .story-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.4rem, 3vw, 1.9rem);
+            font-style: italic;
+            line-height: 1.25;
+        }
+
+        .story-body {
+            padding: 2.5rem;
+        }
+
+        .story-text {
+            font-size: 1.05rem;
+            line-height: 1.85;
+            color: var(--ink);
+            white-space: pre-wrap;
+        }
+
+        .moral-box {
+            margin-top: 2rem;
+            padding: 1.2rem 1.5rem;
+            background: linear-gradient(135deg, rgba(240,192,96,0.15), rgba(116,198,157,0.1));
+            border-left: 4px solid var(--golden);
+            border-radius: 0 12px 12px 0;
+        }
+
+        .moral-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--forest);
+            margin-bottom: 0.4rem;
+        }
+
+        .moral-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            font-style: italic;
+            color: var(--warm-brown);
+            line-height: 1.5;
+        }
+
+        /* ── Actions ── */
+        .story-actions {
+            padding: 1.2rem 2.5rem 2rem;
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: 2px solid;
+            transition: all 0.18s;
+        }
+
+        .btn-another {
+            background: var(--forest);
+            border-color: var(--forest);
+            color: white;
+        }
+
+        .btn-another:hover { background: #1e4d38; border-color: #1e4d38; }
+
+        .btn-copy {
+            background: white;
+            border-color: rgba(92,61,46,0.2);
+            color: var(--warm-brown);
+        }
+
+        .btn-copy:hover { border-color: var(--amber); color: var(--amber); }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .card { padding: 1.5rem; }
+            .story-body { padding: 1.5rem; }
+            .story-header { padding: 1.5rem; }
+            .story-actions { padding: 1rem 1.5rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <span class="header-icon">📖</span>
+    <h1>Story <em>Seeds</em></h1>
+    <p>Life lessons told through stories — for little minds that grow big</p>
+</header>
+
+<main>
+    <div class="card">
+        <div class="card-title">✨ Create a Story</div>
+
+        <!-- Quick Value Tags -->
+        <div class="form-group" style="margin-bottom:1.4rem;">
+            <label>Popular Values — click to fill</label>
+            <div class="value-tags">
+                <span class="tag" onclick="setTag(this,'Loyalty')">Loyalty</span>
+                <span class="tag" onclick="setTag(this,'Honesty')">Honesty</span>
+                <span class="tag" onclick="setTag(this,'Courage')">Courage</span>
+                <span class="tag" onclick="setTag(this,'Kindness')">Kindness</span>
+                <span class="tag" onclick="setTag(this,'Patience')">Patience</span>
+                <span class="tag" onclick="setTag(this,'Gratitude')">Gratitude</span>
+                <span class="tag" onclick="setTag(this,'Sharing')">Sharing</span>
+                <span class="tag" onclick="setTag(this,'Forgiveness')">Forgiveness</span>
+                <span class="tag" onclick="setTag(this,'Hard Work')">Hard Work</span>
+                <span class="tag" onclick="setTag(this,'Respect')">Respect</span>
+            </div>
+        </div>
+
+        <div class="form-grid">
+            <div class="form-group full">
+                <label>Value or Life Lesson</label>
+                <input type="text" id="valueInput" placeholder="e.g. Loyalty, Courage, Kindness..." />
+            </div>
+
+            <div class="form-group">
+                <label>Child's Age Group</label>
+                <select id="ageGroup">
+                    <option value="5-7">5 – 7 years (tiny tots)</option>
+                    <option value="8-10" selected>8 – 10 years (young readers)</option>
+                    <option value="11-13">11 – 13 years (pre-teens)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Story Language</label>
+                <select id="language">
+                    <option value="English" selected>🇬🇧 English</option>
+                    <option value="Hindi">🇮🇳 Hindi</option>
+                    <option value="Telugu">Telugu</option>
+                </select>
+            </div>
+
+            <div class="form-group full">
+                <label>Child's Name <span style="font-weight:400;text-transform:none">(optional — makes them the hero!)</span></label>
+                <input type="text" id="childName" placeholder="e.g. Arjun, Priya, Riya..." />
+            </div>
+        </div>
+
+        <button class="btn-generate" id="generateBtn" onclick="generateStory()">
+            <span>🌱</span> Generate Story
+        </button>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading" id="loading">
+        <span class="book-loader">📚</span>
+        <p>Weaving your story with care...</p>
+    </div>
+
+    <!-- Story Output -->
+    <div class="story-output" id="storyOutput">
+        <div class="story-card">
+            <div class="story-header">
+                <div class="story-meta">
+                    <span class="badge" id="badgeValue"></span>
+                    <span class="badge" id="badgeAge"></span>
+                    <span class="badge" id="badgeLang"></span>
+                </div>
+                <div class="story-title" id="storyTitle"></div>
+            </div>
+            <div class="story-body">
+                <div class="story-text" id="storyText"></div>
+                <div class="moral-box">
+                    <div class="moral-label">🌟 The Moral</div>
+                    <div class="moral-text" id="storyMoral"></div>
+                </div>
+            </div>
+            <div class="story-actions">
+                <button class="btn-action btn-another" onclick="generateStory()">🔄 Another Story</button>
+                <button class="btn-action btn-copy" onclick="copyStory()">📋 Copy Story</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    function setTag(el, value) {
+        document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('valueInput').value = value;
+    }
+
+    async function generateStory() {
+        const value = document.getElementById('valueInput').value.trim();
+        if (!value) {
+            alert('Please enter a value or click one of the tags above!');
+            return;
+        }
+
+        const request = {
+            value: value,
+            ageGroup: document.getElementById('ageGroup').value,
+            language: document.getElementById('language').value,
+            childName: document.getElementById('childName').value.trim()
+        };
+
+        document.getElementById('generateBtn').disabled = true;
+        document.getElementById('loading').classList.add('visible');
+        document.getElementById('storyOutput').classList.remove('visible');
+
+        try {
+            const response = await fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(request)
+            });
+
+            const data = await response.json();
+
+            document.getElementById('storyTitle').textContent = data.title;
+            document.getElementById('storyText').textContent = data.story;
+            document.getElementById('storyMoral').textContent = data.moral;
+            document.getElementById('badgeValue').textContent = '✨ ' + data.value;
+            document.getElementById('badgeAge').textContent = '🎂 Age ' + data.ageGroup;
+            document.getElementById('badgeLang').textContent = data.language;
+
+            document.getElementById('storyOutput').classList.add('visible');
+        } catch (err) {
+            alert('Something went wrong. Please check your API key and try again.');
+            console.error(err);
+        } finally {
+            document.getElementById('loading').classList.remove('visible');
+            document.getElementById('generateBtn').disabled = false;
+        }
+    }
+
+    function copyStory() {
+        const title = document.getElementById('storyTitle').textContent;
+        const story = document.getElementById('storyText').textContent;
+        const moral = document.getElementById('storyMoral').textContent;
+        const text = `${title}\n\n${story}\n\nMoral: ${moral}`;
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.querySelector('.btn-copy');
+            btn.textContent = '✅ Copied!';
+            setTimeout(() => btn.textContent = '📋 Copy Story', 2000);
+        });
+    }
+</script>
+
+</body>
+</html>
